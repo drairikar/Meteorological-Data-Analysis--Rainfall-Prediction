@@ -25,15 +25,16 @@ series.
 | Horizon | Model | MAE | RMSE |
 | --- | --- | ---: | ---: |
 | Daily (112 test days, mm/day) | ARIMA(90, 0, 1) | 0.803 | 1.049 |
-| | Baseline: training mean | 0.798 | 1.019 |
-| | Baseline: persistence (yesterday's value) | **0.752** | **0.985** |
+| | Baseline: training mean | **0.798** | **1.019** |
+| | Baseline: last training value, held constant | 1.536 | 1.709 |
 | Hourly (last 100 test hours, mm/h) | AR(900) | 0.074 | 0.089 |
 | | Baseline: training mean | **0.066** | **0.088** |
 
-Model scores come from the notebook; baseline scores from `python baselines.py`, which uses the same
-split.
+Model scores come from the notebook; baseline scores from `python baselines.py`. All forecasts, models and
+baselines alike, use only data up to the end of training, so they share a forecast origin.
 
-**Takeaway:** neither high-order model beats a naive forecast. Rainfall is intermittent and heavy-tailed,
+**Takeaway:** neither high-order model beats a constant forecast of the training mean, though the daily
+ARIMA does beat holding the last training value. Rainfall is intermittent and heavy-tailed,
 which breaks the Gaussian assumptions behind linear AR/ARIMA. With hundreds of lags the models mostly fit
 noise, and their multi-step forecasts decay back to the mean. Next steps that would be worth trying:
 

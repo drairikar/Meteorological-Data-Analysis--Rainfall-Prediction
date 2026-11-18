@@ -29,7 +29,8 @@ def main():
 
     rows = [
         ("daily", "train mean", *scores(test_d, np.full(len(test_d), train_d.mean()))),
-        ("daily", "persistence (yesterday)", *scores(test_d, daily.shift(1).loc[test_d.index])),
+        # Same forecast origin as the notebook's ARIMA: only training data is used.
+        ("daily", "last training value", *scores(test_d, np.full(len(test_d), train_d.iloc[-1]))),
         ("hourly, last 100 h", "train mean", *scores(test_h, np.full(len(test_h), train_h.mean()))),
     ]
     print(f"{'horizon':<20}{'baseline':<26}{'MAE':>8}{'RMSE':>8}")
